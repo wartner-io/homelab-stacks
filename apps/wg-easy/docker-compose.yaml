@@ -6,7 +6,7 @@ services:
       - WG_HOST=10.182.1.59
 
       # Optional:
-      # - PASSWORD=sectret
+      #´ - PASSWORD=sectret
       # - WG_PORT=51820
       # - WG_DEFAULT_ADDRESS=10.8.0.x
       # - WG_DEFAULT_DNS=10.182.1.165
