@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+  mealie-frontend:
+    image: hkotel/mealie:frontend-v1.0.0beta-4
+    container_name: mealie-frontend
+    depends_on:
+      - mealie-api
+    environment:
+      - API_URL=http://mealie-api:9000 #
+    restart: always
+    ports:
+      - "9925:3000" #
+    volumes:
+      - mealie-data:/app/data/ #
+  mealie-api:
+    image: hkotel/mealie:api-v1.0.0beta-4
+    container_name: mealie-api
+    depends_on:
+      - postgres
+    volumes:
+      - mealie-data:/app/data/
+    environment:
+      - ALLOW_SIGNUP=true
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+      - MAX_WORKERS=1
+      - WEB_CONCURRENCY=1
+      - BASE_URL=https://mealie.wartner.cloud
+      - DB_ENGINE=postgres
+      - POSTGRES_USER=mealie
+      - POSTGRES_PASSWORD=mealie
+      - POSTGRES_SERVER=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=mealie
+      - DEFAULT_EMAIL=florian
+      - DEFAULT_EMAIL=florian@wartner.io
+    restart: always
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: mealie
+      POSTGRES_USER: mealie
+
+volumes:
+  mealie-data:
+    driver: local
