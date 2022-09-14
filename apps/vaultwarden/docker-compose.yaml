@@ -1,0 +1,40 @@
+version: '3'
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    ports:
+      - 8154:80
+      - 3112:3012
+    restart: always
+    environment:
+      WEBSOCKET_ENABLED: "true"
+      SIGNUPS_ALLOWED: "false"
+      SMTP_HOST: smtp-relay.sendinblue.com
+      SMTP_FROM:
+      SMTP_PORT: 587
+      SMTP_USERNAME:
+      SMTP_PASSWORD:
+      SMTP_SECURITY: starttls
+      DATABASE_URL: mysql://vaultwarden:vaultwarden@mariadb/vaultwarden
+      DOMAIN: https://vault.wartner.cloud
+    volumes:
+      - ./vw-data:/data
+
+  mariadb:
+    image: "mariadb"
+    container_name: "mariadb"
+    hostname: "mariadb"
+    restart: always
+    volumes:
+      - "mariadb_vol:/var/lib/mysql"
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=vaultwarden"
+      - "MYSQL_PASSWORD=vaultwarden"
+      - "MYSQL_DATABASE=vaultwarden"
+      - "MYSQL_USER=vaultwarden"
+
+volumes:
+  vaultwarden_vol:
+  mariadb_vol:
