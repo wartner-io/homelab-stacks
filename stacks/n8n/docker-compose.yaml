@@ -1,0 +1,56 @@
+version: '2'
+services:
+  postgres:
+    image: postgres:14.5-alpine
+    environment:
+      - POSTGRES_PASSWORD=n8n_db
+      - POSTGRES_USER=n8n_db
+      - POSTGRES_DB=n8n_db
+    volumes:
+      - n8n_postgres:/var/lib/postgresql/data
+    networks:
+      - n8n
+    ports:
+      - '5432:5432'
+  redis:
+    image: redis:6.2.7-alpine
+    volumes:
+      - n8n_redis:/data
+    networks:
+      - n8n
+    ports:
+      - '6379:6379'
+  n8n:
+    image: n8nio/n8n
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_DATABASE=n8n_db
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_USER=n8n_db
+      - DB_POSTGRESDB_PASSWORD=n8n_db
+      - N8N_SMTP_HOST=smtp-relay.sendinblue.com
+      - N8N_SMTP_PORT=587
+      - N8N_SMTP_USER=YourUser
+      - N8N_SMTP_PASS=YourPassword
+      - N8N_SMTP_SENDER=YourSender
+      - 'WEBHOOK_URL=https://n8n.your-url.tld'
+      - N8N_PROTOCOL=https
+      - N8N_HIRING_BANNER_ENABLED=false
+      - N8N_HOST=n8n.wartner.io
+      - QUEUE_BULL_REDIS_HOST=redis
+      - GENERIC_TIMEZONE=Europe/Berlin
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - n8n
+    ports:
+      - '5678:5678'
+    command: n8n start
+volumes:
+  n8n_data:
+  n8n_redis:
+  n8n_postgres:
+networks:
+  n8n:
+    driver: bridge

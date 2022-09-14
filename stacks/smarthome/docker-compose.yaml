@@ -1,0 +1,37 @@
+version: '2'
+services:
+  homebridge:
+    restart: always
+    image: 'oznu/homebridge:latest'
+    network_mode: host
+    privileged: true
+    volumes:
+      - 'homebridge_data:/homebridge'
+    logging:
+      driver: json-file
+      options:
+        max-size: 10mb
+        max-file: 1
+    environment:
+      - TZ=Europe/Berlin
+  node-red:
+    restart: always
+    image: nodered/node-red
+    volumes:
+      - nodered_data:/data
+    ports:
+      - 1873:1880
+  iobroker:
+    restart: always
+    image: iobroker/iobroker
+    volumes:
+      - 'iobroker_data:/opt/iobroker'
+    ports:
+      - '8089:8081'
+    environment:
+      - IOB_ADMINPORT=8089
+      - AVAHI=true
+volumes:
+  homebridge_data: null
+  iobroker_data: null
+  nodered_data: null

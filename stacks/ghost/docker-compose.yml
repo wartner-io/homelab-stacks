@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+ ghost:
+  image: ghost:latest
+  restart: always
+  ports:
+   - "2368:2368"
+  environment:
+    - database__client=mysql
+    - database__connection__host=mysql
+    - database__connection__database=ghost_db
+    - database__connection__user=ghost_db
+    - database__connection__password=ghost_db
+    - url=https://your-url.tld
+    - mail__options__port=587
+    - mail__options__auth__user=YourUser
+    - mail__options__host=smtp-relay.sendinblue.com
+    - mail__transport=SMTP
+    - mail__from=YourSender
+    - mail__options__auth__pass=YourPassword
+    - mail__options__service=SMTP
+  volumes:
+  - "data-ghost-content:/var/lib/ghost/content"
+
+ mysql:
+  image: mariadb:10.3
+  restart: always
+  environment:
+   - MYSQL_ROOT_PASSWORD=ghost_db
+   - MYSQL_USER=ghost_db
+   - MYSQL_PASSWORD=ghost_db
+   - MYSQL_DATABASE=ghost_db
+  expose:
+  - "3306"
+  volumes:
+  - "data-ghost-db:/var/lib/mysql"
+
+ ghost-backup:
+  image: bennetimo/ghost-backup:latest
+  container_name: "ghost-backup"
+  environment:
+   - MYSQL_USER=ghost_db
+   - MYSQL_PASSWORD=ghost_db
+   - MYSQL_DATABASE=ghost_db
+  volumes:
+  - "data-ghost-content:/var/lib/ghost/content"
+
+volumes:
+ data-ghost-content:
+ data-ghost-db:
