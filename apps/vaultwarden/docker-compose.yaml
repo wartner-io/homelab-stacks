@@ -9,7 +9,7 @@ services:
     restart: always
     environment:
       WEBSOCKET_ENABLED: "true"
-      SIGNUPS_ALLOWED: "false"
+      SIGNUPS_ALLOWED: "true"
       SMTP_HOST: smtp-relay.sendinblue.com
       SMTP_FROM:
       SMTP_PORT: 587
