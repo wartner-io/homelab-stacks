@@ -11,7 +11,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - database:/var/lib/mysql
+      - mautic_database:/var/lib/mysql
     restart: always
     networks:
       - mauticnet
@@ -33,3 +33,10 @@ services:
       - mauticnet
     ports:
       - "8880:80"
+
+networks:
+    mauticnet:
+
+volumes:
+    mautic_database:
+    mautic_data:
