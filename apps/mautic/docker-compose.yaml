@@ -5,6 +5,7 @@ services:
     image: powertic/percona-docker
     container_name: database
     environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
       MYSQL_USER: mautic_db
       MYSQL_PASSWORD: mautic_db
       MYSQL_DATABASE: mautic_db
