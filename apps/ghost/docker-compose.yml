@@ -35,16 +35,6 @@ services:
   volumes:
   - "data-ghost-db:/var/lib/mysql"
 
- ghost-backup:
-  image: bennetimo/ghost-backup:latest
-  container_name: "ghost-backup"
-  environment:
-   - MYSQL_USER=ghost_db
-   - MYSQL_PASSWORD=ghost_db
-   - MYSQL_DATABASE=ghost_db
-  volumes:
-  - "data-ghost-content:/var/lib/ghost/content"
-
 volumes:
  data-ghost-content:
  data-ghost-db:
